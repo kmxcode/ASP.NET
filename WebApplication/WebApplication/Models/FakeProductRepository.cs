@@ -14,5 +14,15 @@ namespace WebApplication.Models
                 new Product { ProductID = 3, Name = "Name 3", Description = "Desc 3", Price = 3, Category = "Category 3" },
                 new Product { ProductID = 4, Name = "Name 4", Description = "Desc 4", Price = 4, Category = "Category 4" }
         }.AsQueryable<Product>();
+
+        public Product DeleteProduct(int productID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveProduct(Product product)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -8,5 +8,8 @@ namespace WebApplication.Models
     public interface IProductRepository
     {
         IQueryable<Product> Products { get; }
+
+        Product DeleteProduct(int productID);
+        void SaveProduct(Product product);
     }
 }
