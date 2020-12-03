@@ -42,6 +42,7 @@ namespace WebApplication
             app.UseDeveloperExceptionPage(); // informacje szczegó³owe o b³êdach
             app.UseStatusCodePages(); // Wyœwietla strony ze statusem b³êdu
             app.UseStaticFiles(); // obs³uga treœci statycznych css, images, js
+            app.UseElapsedTimeMiddleware();
             app.UseRouting();
 
 
