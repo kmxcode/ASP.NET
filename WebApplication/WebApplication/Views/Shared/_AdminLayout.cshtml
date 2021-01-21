@@ -2,19 +2,23 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet"
-          asp-href-include="~/lib/bootstrap/css/*.css"
-          asp-href-exclude="**/*-reboot*,**/*-grid*" />
-    <title>SportsStore</title>
+    <link rel="stylesheet" asp-href-include="~/lib/bootstrap/css/*.css" />
+    <title>@ViewBag.Title</title>
 </head>
 <body>
-    <div class="alert alert-primary" role="alert">
-        @TempData["message"]
-    </div>
-    <div class="row m-1 p-1 ">
-        <div class="col-9">
-            @RenderBody()
+    <div class="bg-info p-2 row">
+        <div class="col">
+            <h4>@ViewBag.Title</h4>
+        </div>
+        <div class="col-2">
+            <a class="btn btn-sm btn-primary"
+               asp-action="Logout" asp-controller="Account">Wyloguj</a>
         </div>
     </div>
+    @if (TempData["message"] != null)
+    {
+        <div class="alert alert-success">@TempData["message"]</div>
+    }
+    @RenderBody()
 </body>
 </html>

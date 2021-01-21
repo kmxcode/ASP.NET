@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApplication.Models;
+using SignalRChat.Hubs;
 
 namespace WebApplication
 {
@@ -29,6 +31,13 @@ namespace WebApplication
             services.AddRazorPages();
             services.AddTransient<IProductRepository, EFProductRepository>();
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration["Data:SportStoreProducts:ConnectionString"]));
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+            services.AddControllers();
+            services.AddSwaggerGen();
+            services.AddSignalR();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,7 +52,15 @@ namespace WebApplication
             app.UseStatusCodePages(); // Wyœwietla strony ze statusem b³êdu
             app.UseStaticFiles(); // obs³uga treœci statycznych css, images, js
             app.UseElapsedTimeMiddleware();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = "api";
+            });
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
 
             app.UseEndpoints(routes => {
@@ -71,6 +88,18 @@ namespace WebApplication
                         controller = "Admin",
                     }
                 );
+
+                routes.MapControllerRoute(
+                    name: null,
+                    pattern: "Chat/{action=Index}",
+                    defaults: new
+                    {
+                        controller = "Chat",
+                    }
+                );
+
+                routes.MapHub<ChatHub>("/chathub");
+                routes.MapHub<CounterHub>("/counterhub");
 
             });
             SeedData.EnsurePopulated(app);

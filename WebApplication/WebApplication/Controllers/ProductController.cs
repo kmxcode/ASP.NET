@@ -20,5 +20,8 @@ namespace WebApplication.Controllers
         {
             return View();
         }
+
+        public ViewResult GetById(int productID) => View(productRepository.Products.FirstOrDefault(p => p.ProductID == productID));
+
     }
 }
